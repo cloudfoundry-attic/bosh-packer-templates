@@ -96,7 +96,7 @@
                 },
 
                 "virtualbox": {
-                    "execute_command": "echo {{ .Vars }}; echo 'c1oudc0w' | {{.Vars}} sudo -E -S bash '{{.Path}}'"
+                    "execute_command": "echo 'c1oudc0w' | {{.Vars}} OVF_TOOL_URL={{user `ovf_tool_url`}} sudo -E -S bash '{{.Path}}'"
                 }
             }
         },
