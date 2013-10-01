@@ -119,7 +119,42 @@
             "type": "shell",
             "scripts": [
                 "scripts/sshd.sh",
-                "scripts/sudoers.sh",
+                "scripts/sudoers.sh"
+            ],
+            "override": {
+                "amazon-ebs": {
+                    "execute_command": "chmod +x {{ .Path }}; {{ .Vars }} sudo -E '{{ .Path }}'"
+                },
+
+                "virtualbox": {
+                    "execute_command": "echo 'c1oudc0w' | {{.Vars}} sudo -E -S bash '{{.Path}}'"
+                }
+            }
+        },
+        {
+            "type": "chef-solo",
+            "cookbook_paths": ["cookbooks"],
+            "run_list": [
+                "apt",
+                "ruby_build",
+                "rbenv::system",
+                "stemcell_builder"
+            ],
+            "json": {
+                "rbenv": {
+                    "rubies": ["1.9.3-p448"],
+                    "global": "1.9.3-p448",
+                    "gems": {
+                        "1.9.3-p448": [{
+                            "name": "bundler"
+                        }]
+                    }
+                }
+            }
+        },
+        {
+            "type": "shell",
+            "scripts": [
                 "scripts/cleanup.sh"
             ],
             "override": {
