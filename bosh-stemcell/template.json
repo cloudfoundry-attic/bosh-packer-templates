@@ -1,0 +1,159 @@
+{
+    "variables": {
+        "ovf_tool_url": null,
+        "aws_access_key": "",
+        "aws_secret_key": ""
+    },
+    "builders": [
+        {
+            "type": "amazon-ebs",
+            "access_key": "{{user `aws_access_key`}}",
+            "secret_key": "{{user `aws_secret_key`}}",
+            "instance_type": "m1.small",
+            "region": "us-east-1",
+            "source_ami": "ami-ad83d7c4",
+            "ssh_username": "ubuntu",
+            "ssh_timeout": "20m",
+            "ami_name": "bosh-stemcell {{timestamp}}"
+        },
+        {
+            "type": "virtualbox",
+            "iso_checksum": "2af1c223f586f59237212bb9c06ad774673c8952",
+            "iso_checksum_type": "sha1",
+            "iso_url": "http://releases.ubuntu.com/13.04/ubuntu-13.04-server-amd64.iso",
+            "boot_wait": "10s",
+            "boot_command": [
+                "<esc><wait>",
+                "<esc><wait>",
+                "<enter><wait>",
+                "/install/vmlinuz<wait>",
+                " auto<wait>",
+                " console-setup/ask_detect=false<wait>",
+                " console-setup/layoutcode=us<wait>",
+                " console-setup/modelcode=pc105<wait>",
+                " debconf/frontend=noninteractive<wait>",
+                " debian-installer=en_US<wait>",
+                " fb=false<wait>",
+                " initrd=/install/initrd.gz<wait>",
+                " kbd-chooser/method=us<wait>",
+                " keyboard-configuration/layout=USA<wait>",
+                " keyboard-configuration/variant=USA<wait>",
+                " locale=en_US<wait>",
+                " netcfg/get_domain=vm<wait>",
+                " netcfg/get_hostname=ubuntu<wait>",
+                " noapic<wait>",
+                " preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/preseed.cfg<wait>",
+                " -- <wait>",
+                "<enter><wait>"
+            ],
+            "http_directory": "http",
+            "shutdown_command": "echo 'shutdown -P now' > shutdown.sh; echo 'c1oudc0w' | sudo -S sh 'shutdown.sh'",
+            "ssh_wait_timeout": "20m",
+            "guest_additions_path": "VBoxGuestAdditions_{{.Version}}.iso",
+            "virtualbox_version_file": ".vbox_version",
+            "ssh_username": "ubuntu",
+            "ssh_password": "c1oudc0w",
+            "vboxmanage": [
+                [
+                    "modifyvm",
+                    "{{.Name}}",
+                    "--memory",
+                    "1024"
+                ],
+                [
+                    "modifyvm",
+                    "{{.Name}}",
+                    "--cpus",
+                    "2"
+                ]
+            ]
+        }
+    ],
+    "provisioners": [
+        {
+            "type": "shell",
+            "scripts": [
+                "scripts/update.sh"
+            ],
+            "override": {
+                "amazon-ebs": {
+                    "execute_command": "chmod +x {{ .Path }}; {{ .Vars }} sudo -E '{{ .Path }}'"
+                },
+
+                "virtualbox": {
+                    "execute_command": "echo {{ .Vars }}; echo 'c1oudc0w' | {{.Vars}} sudo -E -S bash '{{.Path}}'"
+                }
+            }
+        },
+        {
+            "type": "shell",
+            "scripts": [
+                "scripts/ovf_tool.sh"
+            ],
+            "override": {
+                "amazon-ebs": {
+                    "execute_command": "chmod +x {{ .Path }}; {{ .Vars }} OVF_TOOL_URL={{user `ovf_tool_url`}} sudo -E '{{ .Path }}'"
+                },
+
+                "virtualbox": {
+                    "execute_command": "echo {{ .Vars }}; echo 'c1oudc0w' | {{.Vars}} sudo -E -S bash '{{.Path}}'"
+                }
+            }
+        },
+        {
+            "type": "shell",
+            "scripts": [
+                "scripts/vagrant.sh"
+            ],
+            "override": {
+                "amazon-ebs": {
+                    "execute_command": "/bin/true"
+                },
+
+                "virtualbox": {
+                    "execute_command": "echo 'c1oudc0w' | {{.Vars}} sudo -E -S bash '{{.Path}}'"
+                }
+            }
+        },
+        {
+            "type": "shell",
+            "scripts": [
+                "scripts/sshd.sh",
+                "scripts/sudoers.sh",
+                "scripts/cleanup.sh"
+            ],
+            "override": {
+                "amazon-ebs": {
+                    "execute_command": "chmod +x {{ .Path }}; {{ .Vars }} sudo -E '{{ .Path }}'"
+                },
+
+                "virtualbox": {
+                    "execute_command": "echo 'c1oudc0w' | {{.Vars}} sudo -E -S bash '{{.Path}}'"
+                }
+            }
+        },
+        {
+            "type": "shell",
+            "scripts": [
+                "scripts/minimize.sh"
+            ],
+            "override": {
+                "amazon-ebs": {
+                    "execute_command": "/bin/true"
+                },
+
+                "virtualbox": {
+                    "execute_command": "echo 'c1oudc0w' | {{.Vars}} sudo -E -S bash '{{.Path}}'"
+                }
+            }
+        }
+    ],
+
+    "post-processors": [
+        {
+            "output": "bosh-stemcell-{{.Provider}}.box",
+            "type": "vagrant",
+            "keep_input_artifact": true
+        }
+    ]
+}
