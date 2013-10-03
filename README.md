@@ -1,6 +1,7 @@
 bosh-packer-templates
 =====================
 
+* Update packer to at least 0.3.9
 * Get your unique ovftool URL from http://www.vmware.com/support/developer/ovf/
 
         cd bosh-stemcell
