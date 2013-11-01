@@ -7,14 +7,14 @@
     "builders": [
         {
             "type": "amazon-ebs",
-            "access_key": "{{user `aws_access_key`}}",
-            "secret_key": "{{user `aws_secret_key`}}",
+            "access_key": "{{ user `aws_access_key` }}",
+            "secret_key": "{{ user `aws_secret_key` }}",
             "instance_type": "c1.medium",
             "region": "us-east-1",
             "source_ami": "ami-ad83d7c4",
             "ssh_username": "ubuntu",
             "ssh_timeout": "20m",
-            "ami_name": "bosh-stemcell {{isotime | clean_ami_name}}"
+            "ami_name": "bosh-stemcell {{ isotime | clean_ami_name }}"
         },
         {
             "type": "virtualbox",
@@ -96,7 +96,7 @@
                 },
 
                 "virtualbox": {
-                    "execute_command": "echo 'c1oudc0w' | {{.Vars}} OVF_TOOL_URL={{user `ovf_tool_url`}} sudo -E -S bash '{{.Path}}'"
+                    "execute_command": "echo 'c1oudc0w' | {{ .Vars }} OVF_TOOL_URL={{user `ovf_tool_url`}} sudo -E -S bash '{{ .Path }}'"
                 }
             }
         },
@@ -111,7 +111,7 @@
                 },
 
                 "virtualbox": {
-                    "execute_command": "echo 'c1oudc0w' | {{.Vars}} sudo -E -S bash '{{.Path}}'"
+                    "execute_command": "echo 'c1oudc0w' | {{ .Vars }} sudo -E -S bash '{{ .Path }}'"
                 }
             }
         },
@@ -127,7 +127,7 @@
                 },
 
                 "virtualbox": {
-                    "execute_command": "echo 'c1oudc0w' | {{.Vars}} sudo -E -S bash '{{.Path}}'"
+                    "execute_command": "echo 'c1oudc0w' | {{ .Vars }} sudo -E -S bash '{{ .Path }}'"
                 }
             }
         },
@@ -163,7 +163,7 @@
                 },
 
                 "virtualbox": {
-                    "execute_command": "echo 'c1oudc0w' | {{.Vars}} sudo -E -S bash '{{.Path}}'"
+                    "execute_command": "echo 'c1oudc0w' | {{ .Vars }} sudo -E -S bash '{{ .Path }}'"
                 }
             }
         },
@@ -178,7 +178,22 @@
                 },
 
                 "virtualbox": {
-                    "execute_command": "echo 'c1oudc0w' | {{.Vars}} sudo -E -S bash '{{.Path}}'"
+                    "execute_command": "echo 'c1oudc0w' | {{ .Vars }} sudo -E -S bash '{{ .Path }}'"
+                }
+            }
+        },
+        {
+            "type": "shell",
+            "scripts": [
+                "scripts/install_centos_repo.sh"
+            ],
+            "override": {
+                "amazon-ebs": {
+                    "execute_command": "chmod +x {{ .Path }}; {{ .Vars }} sudo -E '{{ .Path }}'"
+                },
+
+                "virtualbox": {
+                    "execute_command": "echo 'c1oudc0w' | {{ .Vars }} sudo -E -S bash '{{ .Path }}'"
                 }
             }
         }
@@ -186,7 +201,7 @@
 
     "post-processors": [
         {
-            "output": "bosh-stemcell-{{.Provider}}.box",
+            "output": "bosh-stemcell-{{ .Provider }}.box",
             "type": "vagrant",
             "keep_input_artifact": true
         }
