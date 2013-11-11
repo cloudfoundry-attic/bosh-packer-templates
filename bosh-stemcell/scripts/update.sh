@@ -1,10 +1,11 @@
 #!/bin/bash -eux
 
-# install ec2 stuff for AMIs, harmless for virtualbox and vmware
-apt-get -y install ec2-api-tools ec2-ami-tools
+perl -pi.orig -e   'next if /-backports/; s/^# (deb .* multiverse)$/$1/'   /etc/apt/sources.list
 
 apt-get -y update
 apt-get -y upgrade
+apt-get -y install curl
+apt-get -y install git
 
 # ensure the correct kernel headers are installed
 apt-get -y install linux-headers-$(uname -r)

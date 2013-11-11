@@ -14,7 +14,17 @@
             "source_ami": "ami-ad83d7c4",
             "ssh_username": "ubuntu",
             "ssh_timeout": "20m",
-            "ami_name": "bosh-stemcell {{ isotime | clean_ami_name }}"
+            "ami_name": "bosh-stemcell {{ isotime | clean_ami_name }}",
+            "ami_block_device_mappings": [ {
+                "device_name": "/dev/sda1",
+                "volume_size": 32,
+                "delete_on_termination": true
+            } ],
+            "launch_block_device_mappings": [ {
+                "device_name": "/dev/sda1",
+                "volume_size": 32,
+                "delete_on_termination": true
+            } ]
         },
         {
             "type": "virtualbox",
@@ -201,7 +211,7 @@
 
     "post-processors": [
         {
-            "output": "bosh-stemcell-{{ .Provider }}.box",
+            "output": "bosh-stemcell-mirror-{{ .Provider }}.box",
             "type": "vagrant",
             "keep_input_artifact": true
         }
