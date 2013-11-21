@@ -59,20 +59,20 @@
             "http_directory": "http",
             "shutdown_command": "echo 'shutdown -P now' > shutdown.sh; echo 'c1oudc0w' | sudo -S sh 'shutdown.sh'",
             "ssh_wait_timeout": "20m",
-            "guest_additions_path": "VBoxGuestAdditions_{{.Version}}.iso",
+            "guest_additions_path": "VBoxGuestAdditions_{{ .Version }}.iso",
             "virtualbox_version_file": ".vbox_version",
             "ssh_username": "ubuntu",
             "ssh_password": "c1oudc0w",
             "vboxmanage": [
                 [
                     "modifyvm",
-                    "{{.Name}}",
+                    "{{ .Name }}",
                     "--memory",
                     "1024"
                 ],
                 [
                     "modifyvm",
-                    "{{.Name}}",
+                    "{{ .Name }}",
                     "--cpus",
                     "2"
                 ]
@@ -91,7 +91,7 @@
                 },
 
                 "virtualbox": {
-                    "execute_command": "echo {{ .Vars }}; echo 'c1oudc0w' | {{.Vars}} sudo -E -S bash '{{.Path}}'"
+                    "execute_command": "echo {{ .Vars }}; echo 'c1oudc0w' | {{ .Vars }} sudo -E -S bash '{{ .Path }}'"
                 }
             }
         },
@@ -102,11 +102,11 @@
             ],
             "override": {
                 "amazon-ebs": {
-                    "execute_command": "chmod +x {{ .Path }}; {{ .Vars }} OVF_TOOL_URL={{user `ovf_tool_url`}} sudo -E '{{ .Path }}'"
+                    "execute_command": "chmod +x {{ .Path }}; {{ .Vars }} OVF_TOOL_URL={{ user `ovf_tool_url` }} sudo -E '{{ .Path }}'"
                 },
 
                 "virtualbox": {
-                    "execute_command": "echo 'c1oudc0w' | {{ .Vars }} OVF_TOOL_URL={{user `ovf_tool_url`}} sudo -E -S bash '{{ .Path }}'"
+                    "execute_command": "echo 'c1oudc0w' | {{ .Vars }} OVF_TOOL_URL={{ user `ovf_tool_url` }} sudo -E -S bash '{{ .Path }}'"
                 }
             }
         },
