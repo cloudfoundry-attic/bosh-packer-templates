@@ -1,6 +1,31 @@
 #!/bin/bash -eux
 
-perl -pi.orig -e   'next if /-backports/; s/^# (deb .* multiverse)$/$1/'   /etc/apt/sources.list
+cat > /etc/apt/sources.list <<TEXT
+deb http://us.archive.ubuntu.com/ubuntu/ raring main restricted
+deb-src http://us.archive.ubuntu.com/ubuntu/ raring main restricted
+
+deb http://us.archive.ubuntu.com/ubuntu/ raring-updates main restricted
+deb-src http://us.archive.ubuntu.com/ubuntu/ raring-updates main restricted
+
+deb http://security.ubuntu.com/ubuntu raring-security main restricted
+deb-src http://security.ubuntu.com/ubuntu raring-security main restricted
+deb http://security.ubuntu.com/ubuntu raring-security universe
+deb-src http://security.ubuntu.com/ubuntu raring-security universe
+deb http://security.ubuntu.com/ubuntu raring-security multiverse
+deb-src http://security.ubuntu.com/ubuntu raring-security multiverse
+
+## N.B. software from this repository is ENTIRELY UNSUPPORTED by the Ubuntu
+## team. Also, please note that software in universe WILL NOT receive any
+## review or updates from the Ubuntu security team.
+deb http://us.archive.ubuntu.com/ubuntu/ raring universe
+deb-src http://us.archive.ubuntu.com/ubuntu/ raring universe
+deb http://us.archive.ubuntu.com/ubuntu/ raring-updates universe
+deb-src http://us.archive.ubuntu.com/ubuntu/ raring-updates universe
+deb http://us.archive.ubuntu.com/ubuntu/ raring multiverse
+deb-src http://us.archive.ubuntu.com/ubuntu/ raring multiverse
+deb http://us.archive.ubuntu.com/ubuntu/ raring-updates multiverse
+deb-src http://us.archive.ubuntu.com/ubuntu/ raring-updates multiverse
+TEXT
 
 apt-get -y update
 apt-get -y upgrade
