@@ -211,7 +211,7 @@
 
     "post-processors": [
         {
-            "output": "bosh-stemcell-mirror-{{ .Provider }}.box",
+            "output": "bosh-stemcell-{{ user `build_identifier` }}-{{ .Provider }}.box",
             "type": "vagrant",
             "keep_input_artifact": true
         }

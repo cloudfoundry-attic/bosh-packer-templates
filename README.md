@@ -16,6 +16,7 @@ bosh-packer-templates
           -var 'aws_access_key=YOUR-AWS-ACCESS-KEY' \
           -var 'aws_secret_key=YOUR-AWS-SECRET-KEY' \
           -var 'ovf_tool_url=https://example.com/ovf-tool-installer.sh' \
+          -var 'build_identifier=git_sha_or_equivalent' \
           template.json
 
 
