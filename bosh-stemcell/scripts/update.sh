@@ -5,6 +5,9 @@ perl -pi.orig -e   'next if /-backports/; s/^# (deb .* multiverse)$/$1/'   /etc/
 apt-get -y update
 apt-get -y upgrade
 apt-get -y install curl
+
+# Hack to get git installed more reliably on AWS
+apt-get -y update --fix-missing
 apt-get -y install git
 
 # ensure the correct kernel headers are installed
