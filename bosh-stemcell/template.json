@@ -2,7 +2,8 @@
     "variables": {
         "ovf_tool_url": null,
         "aws_access_key": null,
-        "aws_secret_key": null
+        "aws_secret_key": null,
+        "build_identifier": null
     },
     "builders": [
         {
@@ -185,21 +186,6 @@
             "override": {
                 "amazon-ebs": {
                     "execute_command": "/bin/true"
-                },
-
-                "virtualbox": {
-                    "execute_command": "echo 'c1oudc0w' | {{ .Vars }} sudo -E -S bash '{{ .Path }}'"
-                }
-            }
-        },
-        {
-            "type": "shell",
-            "scripts": [
-                "scripts/install_centos_repo.sh"
-            ],
-            "override": {
-                "amazon-ebs": {
-                    "execute_command": "chmod +x {{ .Path }}; {{ .Vars }} sudo -E '{{ .Path }}'"
                 },
 
                 "virtualbox": {
