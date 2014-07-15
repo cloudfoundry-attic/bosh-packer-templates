@@ -1,17 +1,3 @@
-apt_repository 'multiverse-raring' do
-  distribution 'raring'
-  uri          'http://us.archive.ubuntu.com/ubuntu/'
-  components   ['multiverse']
-  deb_src      true
-end
-
-apt_repository 'multiverse-raring-updates' do
-  distribution 'raring-updates'
-  uri          'http://us.archive.ubuntu.com/ubuntu/'
-  components   ['multiverse']
-  deb_src      true
-end
-
 # stemcell image creation
 package 'debootstrap'
 package 'kpartx'

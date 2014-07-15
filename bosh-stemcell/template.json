@@ -12,7 +12,7 @@
             "secret_key": "{{ user `aws_secret_key` }}",
             "instance_type": "c1.medium",
             "region": "us-east-1",
-            "source_ami": "ami-ad83d7c4",
+            "source_ami": "ami-408c7f28",
             "ssh_username": "ubuntu",
             "ssh_timeout": "20m",
             "ami_name": "bosh-stemcell {{ isotime | clean_ami_name }}",
@@ -29,9 +29,9 @@
         },
         {
             "type": "virtualbox",
-            "iso_checksum": "2af1c223f586f59237212bb9c06ad774673c8952",
+            "iso_checksum": "4d94f6111b8fe47da94396180ce499d8c0bb44f3",
             "iso_checksum_type": "sha1",
-            "iso_url": "http://releases.ubuntu.com/13.04/ubuntu-13.04-server-amd64.iso",
+            "iso_url": "http://releases.ubuntu.com/14.04/ubuntu-14.04-server-amd64.iso",
             "boot_wait": "10s",
             "boot_command": [
                 "<esc><wait>",
