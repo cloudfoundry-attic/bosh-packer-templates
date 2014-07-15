@@ -1,6 +1,6 @@
 {
     "variables": {
-        "ovf_tool_url": null,
+        "ovf_tool_path": null,
         "aws_access_key": null,
         "aws_secret_key": null,
         "build_identifier": null
@@ -97,17 +97,22 @@
             }
         },
         {
+            "type": "file",
+            "source": "{{ user `ovf_tool_path` }}",
+            "destination": "/tmp/install_ovf_tool.sh"
+        },
+        {
             "type": "shell",
             "scripts": [
                 "scripts/ovf_tool.sh"
             ],
             "override": {
                 "amazon-ebs": {
-                    "execute_command": "chmod +x {{ .Path }}; {{ .Vars }} OVF_TOOL_URL={{ user `ovf_tool_url` }} sudo -E '{{ .Path }}'"
+                    "execute_command": "chmod +x {{ .Path }}; {{ .Vars }} OVF_TOOL_PATH=/tmp/install_ovf_tool.sh sudo -E '{{ .Path }}'"
                 },
 
                 "virtualbox": {
-                    "execute_command": "echo 'c1oudc0w' | {{ .Vars }} OVF_TOOL_URL={{ user `ovf_tool_url` }} sudo -E -S bash '{{ .Path }}'"
+                    "execute_command": "echo 'c1oudc0w' | {{ .Vars }} OVF_TOOL_PATH=/tmp/install_ovf_tool.sh sudo -E -S bash '{{ .Path }}'"
                 }
             }
         },
