@@ -1,8 +1,8 @@
 #!/bin/bash -eux
 
-if [ -f /home/ubuntu/.vbox_version ]; then
+if [ -f $VBOX_VERSION_FILE ]; then
     mkdir /tmp/vbox
-    VER=$(cat /home/ubuntu/.vbox_version)
+    VER=$(cat $VBOX_VERSION_FILE)
     mount -o loop VBoxGuestAdditions_$VER.iso /tmp/vbox
     sh /tmp/vbox/VBoxLinuxAdditions.run
     umount /tmp/vbox

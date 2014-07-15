@@ -61,7 +61,7 @@
             "shutdown_command": "echo 'shutdown -P now' > shutdown.sh; echo 'c1oudc0w' | sudo -S sh 'shutdown.sh'",
             "ssh_wait_timeout": "20m",
             "guest_additions_path": "VBoxGuestAdditions_{{ .Version }}.iso",
-            "virtualbox_version_file": ".vbox_version",
+            "virtualbox_version_file": "/home/ubuntu/.vbox_version",
             "ssh_username": "ubuntu",
             "ssh_password": "c1oudc0w",
             "vboxmanage": [
@@ -127,7 +127,7 @@
                 },
 
                 "virtualbox": {
-                    "execute_command": "echo 'c1oudc0w' | {{ .Vars }} sudo -E -S bash '{{ .Path }}'"
+                    "execute_command": "echo 'c1oudc0w' | {{ .Vars }} VBOX_VERSION_FILE=/home/ubuntu/.vbox_version sudo -E -S bash '{{ .Path }}'"
                 }
             }
         },
