@@ -148,13 +148,26 @@
             }
         },
         {
+            "type": "shell",
+            "scripts": [
+              "scripts/packages.sh"
+            ],
+            "override": {
+                "amazon-ebs": {
+                    "execute_command": "chmod +x {{ .Path }}; {{ .Vars }} sudo -E '{{ .Path }}'"
+                },
+
+                "virtualbox": {
+                    "execute_command": "echo 'c1oudc0w' | {{ .Vars }} sudo -E -S bash '{{ .Path }}'"
+                }
+            }
+        },
+        {
             "type": "chef-solo",
             "cookbook_paths": ["cookbooks"],
             "run_list": [
-                "apt",
                 "ruby_build",
-                "rbenv::system",
-                "stemcell_builder"
+                "rbenv::system"
             ],
             "json": {
                 "rbenv": {
