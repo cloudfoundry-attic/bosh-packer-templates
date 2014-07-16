@@ -34,6 +34,7 @@ apt-get -y install curl
 # Hack to get git installed more reliably on AWS
 apt-get -y update --fix-missing
 apt-get -y install git
+apt-get -y install build-essential
 
 # ensure the correct kernel headers are installed
 apt-get -y install linux-headers-$(uname -r)
