@@ -60,6 +60,7 @@
             "http_directory": "http",
             "shutdown_command": "echo 'shutdown -P now' > shutdown.sh; echo 'c1oudc0w' | sudo -S sh 'shutdown.sh'",
             "ssh_wait_timeout": "20m",
+            "guest_os_type": "Ubuntu_64",
             "guest_additions_path": "VBoxGuestAdditions_{{ .Version }}.iso",
             "virtualbox_version_file": "/home/ubuntu/.vbox_version",
             "ssh_username": "ubuntu",
