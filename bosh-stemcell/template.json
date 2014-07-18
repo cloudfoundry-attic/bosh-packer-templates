@@ -76,7 +76,13 @@
                     "{{ .Name }}",
                     "--cpus",
                     "2"
-                ]
+                ],
+				[
+					"modifyvm",
+					"{{ .Name }}",
+					"--longmode",
+					"on"
+				]
             ]
         }
     ],
