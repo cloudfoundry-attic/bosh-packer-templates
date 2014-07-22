@@ -1,6 +1,6 @@
 {
     "variables": {
-        "ovf_tool_url": null,
+        "ovf_tool_path": null,
         "aws_access_key": null,
         "aws_secret_key": null,
         "build_identifier": null
@@ -12,7 +12,7 @@
             "secret_key": "{{ user `aws_secret_key` }}",
             "instance_type": "c1.medium",
             "region": "us-east-1",
-            "source_ami": "ami-ad83d7c4",
+            "source_ami": "ami-408c7f28",
             "ssh_username": "ubuntu",
             "ssh_timeout": "20m",
             "ami_name": "bosh-stemcell {{ isotime | clean_ami_name }}",
@@ -29,9 +29,9 @@
         },
         {
             "type": "virtualbox",
-            "iso_checksum": "2af1c223f586f59237212bb9c06ad774673c8952",
+            "iso_checksum": "4d94f6111b8fe47da94396180ce499d8c0bb44f3",
             "iso_checksum_type": "sha1",
-            "iso_url": "http://releases.ubuntu.com/13.04/ubuntu-13.04-server-amd64.iso",
+            "iso_url": "http://releases.ubuntu.com/14.04/ubuntu-14.04-server-amd64.iso",
             "boot_wait": "10s",
             "boot_command": [
                 "<esc><wait>",
@@ -60,8 +60,9 @@
             "http_directory": "http",
             "shutdown_command": "echo 'shutdown -P now' > shutdown.sh; echo 'c1oudc0w' | sudo -S sh 'shutdown.sh'",
             "ssh_wait_timeout": "20m",
+            "guest_os_type": "Ubuntu_64",
             "guest_additions_path": "VBoxGuestAdditions_{{ .Version }}.iso",
-            "virtualbox_version_file": ".vbox_version",
+            "virtualbox_version_file": "/home/ubuntu/.vbox_version",
             "ssh_username": "ubuntu",
             "ssh_password": "c1oudc0w",
             "vboxmanage": [
@@ -76,38 +77,38 @@
                     "{{ .Name }}",
                     "--cpus",
                     "2"
-                ]
+                ],
+				[
+					"modifyvm",
+					"{{ .Name }}",
+					"--longmode",
+					"on"
+				]
             ]
         }
     ],
     "provisioners": [
         {
-            "type": "shell",
-            "scripts": [
-                "scripts/update.sh"
-            ],
-            "override": {
-                "amazon-ebs": {
-                    "execute_command": "chmod +x {{ .Path }}; {{ .Vars }} sudo -E '{{ .Path }}'"
-                },
-
-                "virtualbox": {
-                    "execute_command": "echo {{ .Vars }}; echo 'c1oudc0w' | {{ .Vars }} sudo -E -S bash '{{ .Path }}'"
-                }
-            }
+            "type": "file",
+            "source": "{{ user `ovf_tool_path` }}",
+            "destination": "/tmp/install_ovf_tool.sh"
         },
         {
             "type": "shell",
             "scripts": [
-                "scripts/ovf_tool.sh"
+                "scripts/sudoers.sh",
+                "scripts/sshd.sh",
+                "scripts/update.sh",
+                "scripts/ovf_tool.sh",
+                "scripts/packages.sh"
             ],
             "override": {
                 "amazon-ebs": {
-                    "execute_command": "chmod +x {{ .Path }}; {{ .Vars }} OVF_TOOL_URL={{ user `ovf_tool_url` }} sudo -E '{{ .Path }}'"
+                    "execute_command": "chmod +x {{ .Path }}; {{ .Vars }} OVF_TOOL_PATH=/tmp/install_ovf_tool.sh sudo -E '{{ .Path }}'"
                 },
 
                 "virtualbox": {
-                    "execute_command": "echo 'c1oudc0w' | {{ .Vars }} OVF_TOOL_URL={{ user `ovf_tool_url` }} sudo -E -S bash '{{ .Path }}'"
+                    "execute_command": "echo 'c1oudc0w' | {{ .Vars }} OVF_TOOL_PATH=/tmp/install_ovf_tool.sh sudo -E -S bash '{{ .Path }}'"
                 }
             }
         },
@@ -122,23 +123,7 @@
                 },
 
                 "virtualbox": {
-                    "execute_command": "echo 'c1oudc0w' | {{ .Vars }} sudo -E -S bash '{{ .Path }}'"
-                }
-            }
-        },
-        {
-            "type": "shell",
-            "scripts": [
-                "scripts/sshd.sh",
-                "scripts/sudoers.sh"
-            ],
-            "override": {
-                "amazon-ebs": {
-                    "execute_command": "chmod +x {{ .Path }}; {{ .Vars }} sudo -E '{{ .Path }}'"
-                },
-
-                "virtualbox": {
-                    "execute_command": "echo 'c1oudc0w' | {{ .Vars }} sudo -E -S bash '{{ .Path }}'"
+                    "execute_command": "echo 'c1oudc0w' | {{ .Vars }} VBOX_VERSION_FILE=/home/ubuntu/.vbox_version sudo -E -S bash '{{ .Path }}'"
                 }
             }
         },
@@ -146,10 +131,8 @@
             "type": "chef-solo",
             "cookbook_paths": ["cookbooks"],
             "run_list": [
-                "apt",
                 "ruby_build",
-                "rbenv::system",
-                "stemcell_builder"
+                "rbenv::system"
             ],
             "json": {
                 "rbenv": {
@@ -166,26 +149,12 @@
         {
             "type": "shell",
             "scripts": [
-                "scripts/cleanup.sh"
-            ],
-            "override": {
-                "amazon-ebs": {
-                    "execute_command": "chmod +x {{ .Path }}; {{ .Vars }} sudo -E '{{ .Path }}'"
-                },
-
-                "virtualbox": {
-                    "execute_command": "echo 'c1oudc0w' | {{ .Vars }} sudo -E -S bash '{{ .Path }}'"
-                }
-            }
-        },
-        {
-            "type": "shell",
-            "scripts": [
+                "scripts/cleanup.sh",
                 "scripts/minimize.sh"
             ],
             "override": {
                 "amazon-ebs": {
-                    "execute_command": "/bin/true"
+                    "execute_command": "chmod +x {{ .Path }}; {{ .Vars }} sudo -E '{{ .Path }}'"
                 },
 
                 "virtualbox": {
