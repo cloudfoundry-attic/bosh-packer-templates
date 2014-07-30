@@ -28,7 +28,7 @@
             } ]
         },
         {
-            "type": "virtualbox",
+            "type": "virtualbox-iso",
             "iso_checksum": "4d94f6111b8fe47da94396180ce499d8c0bb44f3",
             "iso_checksum_type": "sha1",
             "iso_url": "http://releases.ubuntu.com/14.04/ubuntu-14.04-server-amd64.iso",
@@ -107,7 +107,7 @@
                     "execute_command": "chmod +x {{ .Path }}; {{ .Vars }} OVF_TOOL_PATH=/tmp/install_ovf_tool.sh sudo -E '{{ .Path }}'"
                 },
 
-                "virtualbox": {
+                "virtualbox-iso": {
                     "execute_command": "echo 'c1oudc0w' | {{ .Vars }} OVF_TOOL_PATH=/tmp/install_ovf_tool.sh sudo -E -S bash '{{ .Path }}'"
                 }
             }
@@ -122,7 +122,7 @@
                     "execute_command": "/bin/true"
                 },
 
-                "virtualbox": {
+                "virtualbox-iso": {
                     "execute_command": "echo 'c1oudc0w' | {{ .Vars }} VBOX_VERSION_FILE=/home/ubuntu/.vbox_version sudo -E -S bash '{{ .Path }}'"
                 }
             }
@@ -157,7 +157,7 @@
                     "execute_command": "chmod +x {{ .Path }}; {{ .Vars }} sudo -E '{{ .Path }}'"
                 },
 
-                "virtualbox": {
+                "virtualbox-iso": {
                     "execute_command": "echo 'c1oudc0w' | {{ .Vars }} sudo -E -S bash '{{ .Path }}'"
                 }
             }
