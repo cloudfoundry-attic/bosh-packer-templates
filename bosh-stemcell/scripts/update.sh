@@ -28,7 +28,7 @@ deb-src http://us.archive.ubuntu.com/ubuntu/ trusty-updates multiverse
 EOS
 
 apt-get -y update
-apt-get -y upgrade
+DEBIAN_FRONTEND=noninteractive apt-get -y  -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" upgrade
 apt-get -y install curl
 
 # Hack to get git installed more reliably on AWS
