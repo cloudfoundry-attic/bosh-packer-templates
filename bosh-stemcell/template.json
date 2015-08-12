@@ -29,9 +29,9 @@
         },
         {
             "type": "virtualbox-iso",
-            "iso_checksum": "3bfa6eac84d527380d0cc52db9092cde127f161e",
+            "iso_checksum": "0501c446929f713eb162ae2088d8dc8b6426224a",
             "iso_checksum_type": "sha1",
-            "iso_url": "http://releases.ubuntu.com/14.04/ubuntu-14.04.2-server-amd64.iso",
+            "iso_url": "http://releases.ubuntu.com/14.04/ubuntu-14.04.3-server-amd64.iso",
             "boot_wait": "10s",
             "boot_command": [
                 "<esc><wait>",
