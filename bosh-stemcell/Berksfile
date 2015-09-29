@@ -1,4 +1,4 @@
-site :opscode
+source "https://supermarket.chef.io"
 
 cookbook 'ruby_build'
-cookbook 'rbenv', github: 'fnichol/chef-rbenv', tag: 'v0.7.2'
+cookbook 'rbenv', github: 'chef-rbenv/chef-rbenv', tag: "v0.7.3"
